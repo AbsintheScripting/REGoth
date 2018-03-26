@@ -3,17 +3,17 @@
 
 namespace UI
 {
-    class Menu_Settings : public Menu
-    {
-    public:
-        Menu_Settings(Engine::BaseEngine& e);
-        ~Menu_Settings();
+	class Menu_Settings_Game : public Menu
+	{
+	public:
+		Menu_Settings_Game(Engine::BaseEngine& e);
+		~Menu_Settings_Game();
 
-        /**
-         * Creates an instance of this class and appends it to the root UI-View
-         * @return Instance of the class. Don't forget to delete!
-         */
-        static Menu_Settings* create(Engine::BaseEngine& e);
+		/**
+		* Creates an instance of this class and appends it to the root UI-View
+		* @return Instance of the class. Don't forget to delete!
+		*/
+		static Menu_Settings_Game* create(Engine::BaseEngine& e);
 
 		/**
 		* To be called when one of the given actions were triggered
@@ -23,7 +23,7 @@ namespace UI
 
 		void onCustomAction(const std::string& action) override;
 
-    private:
+	private:
 		/**
 		* Performs the select-action on the given item
 		* @param item Item to perform the action on
@@ -31,5 +31,5 @@ namespace UI
 		void performSelectAction(Daedalus::GameState::MenuItemHandle item) override;
 
 		bool m_isWaitingForSettingInput = false;
-    };
+	};
 }

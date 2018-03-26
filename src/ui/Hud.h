@@ -23,6 +23,12 @@ namespace UI
     class Menu_Main;
     class Menu_Load;
     class Menu_Save;
+	class Menu_Settings_Audio;
+	class Menu_Settings_Controls;
+	class Menu_Settings_Extensions;
+	class Menu_Settings_Game;
+	class Menu_Settings_Graphics;
+	class Menu_Settings_Video;
     class Menu_Settings;
     class Menu;
     class DialogBox;
