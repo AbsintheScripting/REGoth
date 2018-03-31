@@ -6,6 +6,7 @@
 
 #include "View.h"
 #include <ZenLib/daedalus/DaedalusGameState.h>
+#include <regex>
 
 namespace UI
 {
@@ -76,6 +77,34 @@ namespace UI
         public:
             MenuItemText(Engine::BaseEngine& e, Menu& baseMenu, const Daedalus::GameState::MenuItemHandle& scriptHandle);
 
+            /**
+             * Updates/draws the UI-Views
+             * @param dt time since last frame
+             * @param mstate mouse-state
+             */
+            void update(double dt, Engine::Input::MouseState& mstate, Render::RenderConfig& config) override;
+        };
+        
+        class MenuItemSlider : public MenuItem
+        {
+        public:
+            MenuItemSlider(Engine::BaseEngine& e, Menu& baseMenu, const Daedalus::GameState::MenuItemHandle& scriptHandle);
+
+            /**
+             * Updates/draws the UI-Views
+             * @param dt time since last frame
+             * @param mstate mouse-state
+             */
+            void update(double dt, Engine::Input::MouseState& mstate, Render::RenderConfig& config) override;
+        };
+        
+        class MenuItemChoicebox : public MenuItem
+        {
+        public:
+            MenuItemChoicebox(Engine::BaseEngine& e, Menu& baseMenu, const Daedalus::GameState::MenuItemHandle& scriptHandle);
+
+            std::vector<std::string> m_Choices;
+            
             /**
              * Updates/draws the UI-Views
              * @param dt time since last frame

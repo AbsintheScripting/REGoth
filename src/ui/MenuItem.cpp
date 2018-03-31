@@ -158,3 +158,122 @@ Daedalus::GEngineClasses::MenuConstants::ESelEvent MenuItem::getSelectionEvent(i
     assert(i < Daedalus::GEngineClasses::MenuConstants::MAX_SEL_ACTIONS);
     return (Daedalus::GEngineClasses::MenuConstants::ESelEvent)getItemScriptData().onSelAction[i];
 }
+
+/**
+ *
+ *
+ *  ========================= MenuItemSlider =========================
+ *
+ *
+ */
+
+MenuItemTypes::MenuItemSlider::MenuItemSlider(Engine::BaseEngine& e, UI::Menu& baseMenu,
+                                          const Daedalus::GameState::MenuItemHandle& scriptHandle)
+    : MenuItem(e, baseMenu, scriptHandle)
+{
+}
+
+void MenuItemTypes::MenuItemSlider::update(double dt, Engine::Input::MouseState& mstate, Render::RenderConfig& config)
+{
+    if (m_IsHidden)
+        return;
+
+    MenuItem::update(dt, mstate, config);
+
+    if (!m_ScriptHandle.isValid())
+        return;
+
+    Daedalus::GEngineClasses::C_Menu_Item& item = getItemScriptData();
+    const UI::zFont* fnt = m_Engine.getFontCache().getFont(item.fontName);
+
+    if (!fnt)
+        return;
+
+    // Get position of the text
+    Math::float2 absTranslation = getAbsoluteTranslation();
+    Math::float2 absSize = getAbsoluteSize();
+    int px = (int)(absTranslation.x * config.state.viewWidth + 0.5f);
+    int py = (int)(absTranslation.y * config.state.viewHeight + 0.5f);
+
+    if (!item.text[0].empty())
+    {
+        // Alignment must be taken care of for text only, as it would mess up the background-pic otherwise
+        if ((item.flags & Daedalus::GEngineClasses::C_Menu_Item::IT_TXT_CENTER) != 0)
+        {
+            int sx = (int)(absSize.x * config.state.viewWidth + 0.5f);
+            int sy = (int)(absSize.y * config.state.viewHeight + 0.5f);
+
+            px += sx / 2;
+            py += sy / 2;
+        }
+
+        EAlign align = (item.flags & Daedalus::GEngineClasses::C_Menu_Item::IT_TXT_CENTER) != 0 ? A_Center : A_TopLeft;
+        drawText(item.text[0], px, py, align, config, item.fontName);
+    }
+}
+
+/**
+ *
+ *
+ *  ========================= MenuItemChoicebox =========================
+ *
+ *
+ */
+
+MenuItemTypes::MenuItemChoicebox::MenuItemChoicebox(Engine::BaseEngine& e, UI::Menu& baseMenu,
+                                          const Daedalus::GameState::MenuItemHandle& scriptHandle)
+    : MenuItem(e, baseMenu, scriptHandle)
+{
+}
+
+void MenuItemTypes::MenuItemChoicebox::update(double dt, Engine::Input::MouseState& mstate, Render::RenderConfig& config)
+{
+    if (m_IsHidden)
+        return;
+
+    MenuItem::update(dt, mstate, config);
+
+    if (!m_ScriptHandle.isValid())
+        return;
+
+    Daedalus::GEngineClasses::C_Menu_Item& item = getItemScriptData();
+    const UI::zFont* fnt = m_Engine.getFontCache().getFont(item.fontName);
+
+    if (!fnt)
+        return;
+
+    // Get position of the text
+    Math::float2 absTranslation = getAbsoluteTranslation();
+    Math::float2 absSize = getAbsoluteSize();
+    int px = (int)(absTranslation.x * config.state.viewWidth + 0.5f);
+    int py = (int)(absTranslation.y * config.state.viewHeight + 0.5f);
+
+    if (!item.text[0].empty())
+    {
+        std::regex r(R"__(([^\|^#]+))__");
+        auto choices_begin = std::sregex_iterator(item.text[0].begin(), item.text[0].end(), r);
+        auto choices_end = std::sregex_iterator();
+        
+        for (std::sregex_iterator i = choices_begin; i != choices_end; ++i) {
+            std::smatch match = *i;
+            std::string match_str = match.str(); 
+            m_Choices.push_back(match_str);
+        }
+        
+        if (!m_Choices.empty()) {
+            // Alignment must be taken care of for text only, as it would mess up the background-pic otherwise
+            if ((item.flags & Daedalus::GEngineClasses::C_Menu_Item::IT_TXT_CENTER) != 0)
+            {
+                int sx = (int)(absSize.x * config.state.viewWidth + 0.5f);
+                int sy = (int)(absSize.y * config.state.viewHeight + 0.5f);
+
+                px += sx / 2;
+                py += sy / 2;
+            }
+
+            EAlign align = (item.flags & Daedalus::GEngineClasses::C_Menu_Item::IT_TXT_CENTER) != 0 ? A_Center : A_TopLeft;
+            drawText(m_Choices.front(), px, py, align, config, item.fontName);
+        }
+    }
+}
+

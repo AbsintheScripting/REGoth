@@ -206,7 +206,8 @@ std::map<Daedalus::GameState::MenuItemHandle, UI::MenuItem*> UI::Menu::initializ
 {
     Daedalus::GEngineClasses::C_Menu& menu = getScriptData();
     std::vector<Daedalus::GameState::MenuItemHandle> items;
-
+    
+    // init all items in the current menu
     for (int i = 0; i < Daedalus::GEngineClasses::MenuConstants::MAX_ITEMS; i++)
     {
         if (!menu.items[i].empty())
@@ -244,10 +245,12 @@ std::map<Daedalus::GameState::MenuItemHandle, UI::MenuItem*> UI::Menu::initializ
                 }
                 break;
             case Daedalus::GEngineClasses::C_Menu_Item::MENU_ITEM_SLIDER:
+                m = new MenuItemTypes::MenuItemSlider(m_Engine, *this, h);
                 break;
             case Daedalus::GEngineClasses::C_Menu_Item::MENU_ITEM_CURSOR:
                 break;
             case Daedalus::GEngineClasses::C_Menu_Item::MENU_ITEM_CHOICEBOX:
+                m = new MenuItemTypes::MenuItemChoicebox(m_Engine, *this, h);
                 break;
             case Daedalus::GEngineClasses::C_Menu_Item::MENU_ITEM_BUTTON:
                 break;
