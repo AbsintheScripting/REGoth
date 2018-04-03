@@ -77,6 +77,12 @@ namespace UI
          * @param item Item to perform the action on
          */
         virtual void performSelectAction(Daedalus::GameState::MenuItemHandle item);
+        
+        /**
+         * Performs the switch-action on the given item
+         * @param item Item to perform the action on
+         */
+        virtual void performSwitchAction(Daedalus::GameState::MenuItemHandle item);
 
         /**
          * Called on a custom select-action, comming from the "onSelAction"-field
@@ -110,6 +116,7 @@ namespace UI
          */
         std::map<Daedalus::GameState::MenuItemHandle, MenuItem*> m_Items;
         std::vector<Daedalus::GameState::MenuItemHandle> m_SelectableItems;
+        std::map<Daedalus::GameState::MenuItemHandle, Daedalus::GameState::MenuItemHandle> m_ActionItems;
 
         /**
          * Currently selected item (Index into m_SelectableItems)

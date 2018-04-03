@@ -50,6 +50,25 @@ int Settings::getChoiceboxValue(std::string settingTopic, std::string settingOpt
         return -1;
 }
 
+void Settings::setChoiceboxValue(std::string settingTopic, std::string settingOption, int direction) {
+    if (settingTopic == "INTERNAL")
+        opt_Internal_Choicebox.option[settingOption] += direction;
+    else if (settingTopic == "GAME")
+        opt_Game_Choicebox.option[settingOption] += direction;
+    else if (settingTopic == "PERFORMANCE")
+        opt_Performance_Choicebox.option[settingOption] += direction;
+    else if (settingTopic == "ENGINE")
+        opt_Engine_Choicebox.option[settingOption] += direction;
+    else if (settingTopic == "VIDEO")
+        opt_Video_Choicebox.option[settingOption] += direction;
+    else if (settingTopic == "SOUND")
+        opt_Sound_Choicebox.option[settingOption] += direction;
+    else if (settingTopic == "KEYS")
+        return; // TODO
+    else if (settingTopic == "RENDERER_D3D")
+        opt_Renderer_D3D_Choicebox.option[settingOption] += direction;
+}
+
 void Settings::initStandardSettings () {
     /* Opt_Internal */
     opt_Internal_Choicebox.option.insert({"perfQualityIndex",0});   // custom settings = 0 or standard settings with 3 quality/perfomance steps

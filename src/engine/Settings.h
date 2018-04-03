@@ -31,6 +31,8 @@ public:
      * @return 
      */
     int getChoiceboxValue(std::string settingTopic, std::string settingOption);
+    
+    void setChoiceboxValue(std::string settingTopic, std::string settingOption, int direction);
 private:
     /**
      * simple map for storing all values

@@ -48,6 +48,8 @@ namespace UI
          * @returns the on-select action of this item (ie. Accept-key was pressed -> close view)
          */
         Daedalus::GEngineClasses::MenuConstants::ESelEvent getSelectionEvent(int i);
+        
+        virtual void performSwitchAction(int direction);
 
     protected:
         /**
@@ -97,6 +99,8 @@ namespace UI
              * @param mstate mouse-state
              */
             void update(double dt, Engine::Input::MouseState& mstate, Render::RenderConfig& config) override;
+            
+            void performSwitchAction(int direction) override;
         };
         
         class MenuItemChoicebox : public MenuItem
@@ -113,6 +117,8 @@ namespace UI
              * @param mstate mouse-state
              */
             void update(double dt, Engine::Input::MouseState& mstate, Render::RenderConfig& config) override;
+            
+            void performSwitchAction(int direction) override;
         };
     }
 }

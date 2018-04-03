@@ -84,6 +84,10 @@ void MenuItem::setTextLine(const std::string& text, unsigned int line)
     item.text[line] = text;
 }
 
+void MenuItem::performSwitchAction(int direction) {
+    
+}
+
 /**
  *
  *
@@ -212,6 +216,11 @@ void MenuItemTypes::MenuItemSlider::update(double dt, Engine::Input::MouseState&
     }
 }
 
+void MenuItemTypes::MenuItemSlider::performSwitchAction(int direction)
+{
+    
+}
+
 /**
  *
  *
@@ -287,5 +296,13 @@ void MenuItemTypes::MenuItemChoicebox::update(double dt, Engine::Input::MouseSta
             drawText(choice, px, py, align, config, item.fontName); 
         }
     }
+}
+
+void MenuItemTypes::MenuItemChoicebox::performSwitchAction(int direction)
+{
+    Daedalus::GEngineClasses::C_Menu_Item& item = getItemScriptData();
+    Settings s;
+    s.setChoiceboxValue(item.onChgSetOptionSection, item.onChgSetOption, direction);
+    // update
 }
 

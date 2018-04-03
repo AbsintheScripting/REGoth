@@ -206,14 +206,25 @@ std::map<Daedalus::GameState::MenuItemHandle, UI::MenuItem*> UI::Menu::initializ
 {
     Daedalus::GEngineClasses::C_Menu& menu = getScriptData();
     std::vector<Daedalus::GameState::MenuItemHandle> items;
+    std::vector<Daedalus::GameState::MenuItemHandle> canChangeItem;
     
-    // TODO: settingTopic settingOption oder auslesen
     // init all items in the current menu
     for (int i = 0; i < Daedalus::GEngineClasses::MenuConstants::MAX_ITEMS; i++)
     {
         if (!menu.items[i].empty())
         {
-            items.push_back(m_pVM->getGameState().createMenuItem());
+            auto newMenu = m_pVM->getGameState().createMenuItem();
+            // The menuItem before this one can change the value in this one
+            // TODO: if regex hits, search in entire items vector 
+            std::regex r (R"__((_CHOICES))__");
+            std::smatch m;
+            if (std::regex_search(menu.items[i],m,r))
+            {
+                canChangeItem.push_back(items.back()); // i-1
+                canChangeItem.push_back(newMenu); // i
+            }
+
+            items.push_back(newMenu);
 
             LogInfo() << "Initializing item: " << menu.items[i];
             m_pVM->initializeInstance(ZMemory::toBigHandle(items.back()),
@@ -269,6 +280,12 @@ std::map<Daedalus::GameState::MenuItemHandle, UI::MenuItem*> UI::Menu::initializ
 
             if (m->isSelectable())
                 m_SelectableItems.push_back(h);
+            
+            auto it = std::find(canChangeItem.begin(), canChangeItem.end(), h);
+            if (it != canChangeItem.end()) {
+                ++it;
+                m_ActionItems[h] = *it;
+            }
         }
     }
 
@@ -305,6 +322,12 @@ bool UI::Menu::onInputAction(Engine::ActionType action)
             }
             break;
 
+        case ActionType::UI_Left:
+            if (!m_SelectableItems.empty()) performSwitchAction(m_SelectableItems[m_SelectedItem]);
+            break;
+        case ActionType::UI_Right:
+            if (!m_SelectableItems.empty()) performSwitchAction(m_SelectableItems[m_SelectedItem]);
+            break;
         case ActionType::UI_Confirm:
             if (!m_SelectableItems.empty()) performSelectAction(m_SelectableItems[m_SelectedItem]);
             break;
@@ -338,6 +361,26 @@ void UI::Menu::performSelectAction(Daedalus::GameState::MenuItemHandle item)
     if (!customFn.empty())
         onCustomAction(customFn);
 }
+
+void UI::Menu::performSwitchAction(Daedalus::GameState::MenuItemHandle item)
+{
+    MenuItem* iData = m_Items[item];
+
+    using namespace Daedalus::GEngineClasses::MenuConstants;
+    using namespace Daedalus::GEngineClasses;
+
+    switch (iData->getSelectionEvent(0))
+    {
+        case SEL_ACTION_UNDEF:
+            C_Menu_Item itemData = iData->getItemScriptData();
+            if ((itemData.flags & C_Menu_Item::IT_EFFECTS_NEXT) != 0) {
+                Daedalus::GameState::MenuItemHandle& actionItem = m_ActionItems[item]; // TODO: still buggy
+                m_Items[actionItem]->performSwitchAction(1);
+            }
+            break;
+    }
+}
+
 UI::Hud& UI::Menu::getHud()
 {
     return m_Engine.getHud();
