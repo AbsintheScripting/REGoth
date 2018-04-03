@@ -207,6 +207,7 @@ std::map<Daedalus::GameState::MenuItemHandle, UI::MenuItem*> UI::Menu::initializ
     Daedalus::GEngineClasses::C_Menu& menu = getScriptData();
     std::vector<Daedalus::GameState::MenuItemHandle> items;
     
+    // TODO: settingTopic settingOption oder auslesen
     // init all items in the current menu
     for (int i = 0; i < Daedalus::GEngineClasses::MenuConstants::MAX_ITEMS; i++)
     {

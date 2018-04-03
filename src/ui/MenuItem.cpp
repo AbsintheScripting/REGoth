@@ -250,6 +250,8 @@ void MenuItemTypes::MenuItemChoicebox::update(double dt, Engine::Input::MouseSta
 
     if (!item.text[0].empty())
     {
+        // get all choices in the item.text[0] String
+        // seperator: | and #
         std::regex r(R"__(([^\|^#]+))__");
         auto choices_begin = std::sregex_iterator(item.text[0].begin(), item.text[0].end(), r);
         auto choices_end = std::sregex_iterator();
@@ -259,6 +261,8 @@ void MenuItemTypes::MenuItemChoicebox::update(double dt, Engine::Input::MouseSta
             std::string match_str = match.str(); 
             m_Choices.push_back(match_str);
         }
+        
+        // TODO: word before # seperator is m_Userdefined
         
         if (!m_Choices.empty()) {
             // Alignment must be taken care of for text only, as it would mess up the background-pic otherwise
@@ -272,7 +276,15 @@ void MenuItemTypes::MenuItemChoicebox::update(double dt, Engine::Input::MouseSta
             }
 
             EAlign align = (item.flags & Daedalus::GEngineClasses::C_Menu_Item::IT_TXT_CENTER) != 0 ? A_Center : A_TopLeft;
-            drawText(m_Choices.front(), px, py, align, config, item.fontName);
+            std::string choice = m_Choices.front();
+            if (!item.onChgSetOption.empty() && !item.onChgSetOptionSection.empty()) {
+                Settings s;
+                try {
+                    choice = m_Choices.at(s.getChoiceboxValue(item.onChgSetOptionSection, item.onChgSetOption));
+                } catch (const std::out_of_range& oor) {
+                }
+            }
+            drawText(choice, px, py, align, config, item.fontName); 
         }
     }
 }

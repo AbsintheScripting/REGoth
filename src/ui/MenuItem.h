@@ -7,6 +7,7 @@
 #include "View.h"
 #include <ZenLib/daedalus/DaedalusGameState.h>
 #include <regex>
+#include <engine/Settings.h>
 
 namespace UI
 {
@@ -103,6 +104,7 @@ namespace UI
         public:
             MenuItemChoicebox(Engine::BaseEngine& e, Menu& baseMenu, const Daedalus::GameState::MenuItemHandle& scriptHandle);
 
+            std::string m_Userdefined;
             std::vector<std::string> m_Choices;
             
             /**

@@ -133,7 +133,7 @@ namespace Engine
         /**
          * Registers all key bindings
          */
-        void setupKeyBindings();
+        void setupKeyBindings(); // TODO: Overwrite Bindings from Settings
 
         /**
          * Un-registers all bindings

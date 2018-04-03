@@ -1,10 +1,8 @@
+/* 
+ * Author: Migos (@AbsintheScripting)
+ */
+
 #include "Menu_Settings.h"
-#include "Menu_Settings_Audio.h"
-#include "Menu_Settings_Controls.h"
-#include "Menu_Settings_Extensions.h"
-#include "Menu_Settings_Game.h"
-#include "Menu_Settings_Graphics.h"
-#include "Menu_Settings_Video.h"
 #include "Hud.h"
 #include "MenuItem.h"
 #include "Menu_Main.h"

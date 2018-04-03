@@ -202,6 +202,7 @@ bool Menu_Log::onInputAction(Engine::ActionType action)
             break;
 
         case ActionType::UI_Close:
+        {
             MenuItem* menu_item = findMenuItem("MENU_ITEM_CONTENT_VIEWER");
             if (!menu_item->isHidden())
             {
@@ -209,6 +210,9 @@ bool Menu_Log::onInputAction(Engine::ActionType action)
                 m_LogStatus = EMenuLogStatus::TopicSelection;
                 return false;
             }
+        }
+        default:
+            break; // so the compiler does not complain anymore
     }
 
     // Close this menu if either the parent function wants to close or this function
